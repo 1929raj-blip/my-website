@@ -9,30 +9,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink-900:#0a0e1a;
-    --ink-800:#111a2e;
-    --ink-700:#1a2740;
-    --ink-650:#213155;
-    --ink-600:#2a3c63;
-    --ink-500:#3e5486;
-    --gold:#cda355;
-    --gold-deep:#a9803a;
-    --gold-soft:rgba(205,163,85,0.16);
-    --paper:#f5efdf;
-    --paper-hi:#fcf9ef;
-    --paper-line:rgba(52,40,18,0.08);
-    --paper-line-strong:rgba(52,40,18,0.15);
-    --ink-text:#241d10;
-    --muted:#79705a;
-    --red-pen:#a3271b;
-    --red-pen-deep:#7d1d14;
-    --red-pen-soft:rgba(163,39,27,0.09);
-    --green:#227455;
-    --green-soft:rgba(34,116,85,0.13);
-    --amber:#96721c;
-    --amber-soft:rgba(150,114,28,0.14);
-    --shadow-lg:0 20px 44px rgba(8,12,22,0.32);
-    --shadow-sm:0 3px 10px rgba(8,12,22,0.09);
+    --ink-900:#0a1420;
+    --ink-800:#0f2237;
+    --ink-700:#193350;
+    --ink-650:#204068;
+    --ink-600:#2b5080;
+    --ink-500:#4169a0;
+    --gold:#d3a75f;
+    --gold-deep:#ab7f3c;
+    --gold-soft:rgba(211,167,95,0.17);
+    --paper:#f7f0e0;
+    --paper-hi:#fdf9ee;
+    --paper-line:rgba(63,46,18,0.07);
+    --paper-line-strong:rgba(63,46,18,0.14);
+    --ink-text:#2b2313;
+    --muted:#83785e;
+    --red-pen:#9c2e23;
+    --red-pen-deep:#77221a;
+    --red-pen-soft:rgba(156,46,35,0.09);
+    --green:#1e7a5a;
+    --green-soft:rgba(30,122,90,0.13);
+    --amber:#a37a1e;
+    --amber-soft:rgba(163,122,30,0.14);
+    --shadow-lg:0 20px 44px rgba(6,11,20,0.32);
+    --shadow-sm:0 3px 10px rgba(6,11,20,0.09);
     --shadow-inset:inset 0 1px 0 rgba(255,255,255,0.5);
     --radius:11px;
     --font-display:'Newsreader', Georgia, serif;
@@ -252,16 +252,7 @@
     font-family:var(--font-display);font-size:18px;font-weight:600;margin:0;color:var(--ink-800);
   }
   .toolbar-controls{display:flex;align-items:center;gap:10px;}
-  .resize-handle{
-    display:flex;align-items:center;justify-content:center;
-    width:26px;height:24px;border-radius:6px;border:1px solid var(--paper-line-strong);
-    background:var(--paper-hi);color:var(--muted);cursor:ns-resize;
-    touch-action:none;user-select:none;
-  }
-  .resize-handle:hover{color:var(--ink-700);border-color:var(--gold);background:var(--gold-soft);}
-  .resize-handle:active{color:var(--ink-800);}
-  .resize-box{overflow:auto;}
-  .chart-wrap.resize-box{overflow:hidden;}
+
   .section-hide-btn{
     background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;
     padding:2px 4px;
@@ -603,21 +594,8 @@ function removeSubject(id){
 }
 
 /* ---------- prefs helpers ---------- */
-var SECTION_DEFAULT_HEIGHT = {log:160, chart:230, mistakes:150, sheet:360};
-var SECTION_MIN_HEIGHT = {log:90, chart:150, mistakes:90, sheet:170};
-var SECTION_MAX_HEIGHT = {log:480, chart:560, mistakes:440, sheet:760};
+var SECTION_HEIGHT = {log:null, chart:240, mistakes:190, sheet:420};
 
-function getSectionHeight(subjectId, key){
-  var m = state.prefs.sectionSize[subjectId];
-  var v = m && m[key];
-  if(typeof v === 'number' && !isNaN(v)) return v;
-  return SECTION_DEFAULT_HEIGHT[key];
-}
-function setSectionHeight(subjectId, key, px){
-  if(!state.prefs.sectionSize[subjectId]) state.prefs.sectionSize[subjectId] = {};
-  state.prefs.sectionSize[subjectId][key] = px;
-  saveState();
-}
 function isSectionHidden(subjectId, key){
   var m = state.prefs.sectionHidden[subjectId];
   return !!(m && m[key]);
@@ -695,45 +673,6 @@ function render(){
   if(nav.type === 'overview') renderOverview();
   else renderSubjectView(nav.subjectId);
   renderModal();
-  wireResizeHandles();
-}
-
-function wireResizeHandles(){
-  var handles = document.querySelectorAll('.resize-handle');
-  for(var i=0; i<handles.length; i++){
-    (function(handle){
-      handle.addEventListener('pointerdown', function(e){
-        e.preventDefault();
-        var subjectId = handle.getAttribute('data-subject');
-        var key = handle.getAttribute('data-key');
-        var box = document.getElementById('resizebox-'+subjectId+'-'+key);
-        if(!box) return;
-        var startY = e.clientY;
-        var startHeight = box.getBoundingClientRect().height;
-        var min = SECTION_MIN_HEIGHT[key] || 90;
-        var max = SECTION_MAX_HEIGHT[key] || 700;
-        try{ handle.setPointerCapture(e.pointerId); }catch(err){}
-        function clamp(v){ return Math.min(max, Math.max(min, v)); }
-        function onMove(ev){
-          var delta = ev.clientY - startY;
-          var newH = clamp(Math.round(startHeight + delta));
-          box.style.height = newH + 'px';
-        }
-        function onUp(ev){
-          handle.removeEventListener('pointermove', onMove);
-          handle.removeEventListener('pointerup', onUp);
-          handle.removeEventListener('pointercancel', onUp);
-          try{ handle.releasePointerCapture(e.pointerId); }catch(err){}
-          var finalH = clamp(Math.round(box.getBoundingClientRect().height));
-          setSectionHeight(subjectId, key, finalH);
-          render();
-        }
-        handle.addEventListener('pointermove', onMove);
-        handle.addEventListener('pointerup', onUp);
-        handle.addEventListener('pointercancel', onUp);
-      });
-    })(handles[i]);
-  }
 }
 
 function renderSidebar(){
@@ -875,12 +814,9 @@ function renderSubjectView(subjectId){
   if(!isSectionHidden(subjectId,'sheet')) host.appendChild(buildSheetSection(subjectId, entries));
 }
 
-var RESIZE_ICON = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12L12 2M6 12L12 6M10 12L12 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
-
 function sectionToolbar(subjectId, key, title){
   return '<div class="section-toolbar"><h2>'+title+'</h2>'+
     '<div class="toolbar-controls">'+
-      '<button class="resize-handle" title="Drag to resize" data-subject="'+subjectId+'" data-key="'+key+'">'+RESIZE_ICON+'</button>'+
       '<button class="section-hide-btn" title="Hide section" onclick="setSectionHidden(\''+subjectId+'\',\''+key+'\', true)">&#10005;</button>'+
     '</div></div>';
 }
@@ -889,11 +825,9 @@ function sectionToolbar(subjectId, key, title){
 function buildLogSection(subjectId){
   var el = document.createElement('div');
   el.className = 'section';
-  var h = getSectionHeight(subjectId, 'log');
   el.innerHTML = sectionToolbar(subjectId, 'log', 'Log a paper') +
     '<div class="section-body">'+
       '<div id="logFormErrorBanner"></div>'+
-      '<div id="resizebox-'+subjectId+'-log" class="resize-box" style="height:'+h+'px;">'+
       '<form class="log-form" id="logForm" onsubmit="return false;">'+
         field('year','Year','number','e.g. 2025',{min:2000,max:2035}) +
         fieldSelect('session','Session') +
@@ -907,7 +841,6 @@ function buildLogSection(subjectId){
         '</div>'+
         '<button type="button" class="submit-btn" onclick="submitLogForm(\''+subjectId+'\')">Add paper</button>'+
       '</form>'+
-      '</div>'+
     '</div>';
   setTimeout(function(){ wireLogForm(subjectId); }, 0);
   return el;
@@ -1043,13 +976,13 @@ function submitLogForm(subjectId){
 function buildChartSection(subjectId, chronoSorted){
   var el = document.createElement('div');
   el.className = 'section';
-  var h = getSectionHeight(subjectId, 'chart');
+  var h = SECTION_HEIGHT.chart;
   var w = 640;
   var bodyHtml;
   if(chronoSorted.length === 0){
     bodyHtml = '<div class="empty-state">No papers logged yet — add one above to start your trend line.</div>';
   } else {
-    bodyHtml = '<div id="resizebox-'+subjectId+'-chart" class="resize-box chart-wrap" style="height:'+h+'px;">' + buildChartSvg(chronoSorted, w, h) + '</div>';
+    bodyHtml = '<div class="chart-wrap" style="height:'+h+'px;">' + buildChartSvg(chronoSorted, w, h) + '</div>';
   }
   el.innerHTML = sectionToolbar(subjectId, 'chart', 'Progress over time') +
     '<div class="section-body">'+bodyHtml+'</div>';
@@ -1098,10 +1031,9 @@ function buildChartSvg(entries, w, h){
 function buildMistakesSection(subjectId, entries){
   var el = document.createElement('div');
   el.className = 'section';
-  var h = getSectionHeight(subjectId, 'mistakes');
   var tags = analyzeNotes(entries);
   var bodyHtml = tags.length ?
-    '<div id="resizebox-'+subjectId+'-mistakes" class="resize-box tag-cloud" style="height:'+h+'px;">'+renderTagCloud(tags)+'</div>' :
+    '<div class="tag-cloud" style="max-height:'+SECTION_HEIGHT.mistakes+'px;">'+renderTagCloud(tags)+'</div>' :
     '<div class="empty-state">No repeated patterns yet. Add private notes when logging papers and they\'ll surface here once a pattern repeats.</div>';
   el.innerHTML = sectionToolbar(subjectId, 'mistakes', 'Recurring mistakes') +
     '<div class="section-body">'+bodyHtml+'</div>';
@@ -1148,7 +1080,6 @@ function sortEntries(entries, key){
 function buildSheetSection(subjectId, entries){
   var el = document.createElement('div');
   el.className = 'section';
-  var h = getSectionHeight(subjectId, 'sheet');
   var sortKey = getSortOrder(subjectId);
   var sorted = sortEntries(entries, sortKey);
   var subject = state.subjects.find(function(s){ return s.id === subjectId; });
@@ -1179,7 +1110,7 @@ function buildSheetSection(subjectId, entries){
           return '<option value="'+k+'"'+(k===sortKey?' selected':'')+'>'+SORT_LABELS[k]+'</option>';
         }).join('')+
       '</select></div>'+
-      '<div id="resizebox-'+subjectId+'-sheet" class="resize-box sheet-scroll" style="height:'+h+'px;">'+
+      '<div class="sheet-scroll" style="max-height:'+SECTION_HEIGHT.sheet+'px;">'+
       '<table class="sheet"><thead><tr>'+
         '<th>Year</th><th>Session</th><th>Date</th><th>Paper</th><th>Marks</th><th>%</th><th></th><th></th>'+
       '</tr></thead><tbody>'+rows+'</tbody></table></div>';
