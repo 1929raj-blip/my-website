@@ -9,28 +9,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink-900:#0c1220;
-    --ink-800:#131c31;
-    --ink-700:#1c2a45;
-    --ink-600:#28395a;
-    --ink-500:#3a4f78;
-    --gold:#c39a3f;
-    --gold-soft:rgba(195,154,63,0.18);
-    --paper:#f6f0e1;
-    --paper-hi:#fbf7ec;
-    --paper-line:rgba(46,36,17,0.09);
-    --paper-line-strong:rgba(46,36,17,0.16);
-    --ink-text:#231d10;
-    --muted:#746a55;
-    --red-pen:#a3241a;
-    --red-pen-soft:rgba(163,36,26,0.10);
-    --green:#2c7a4f;
-    --green-soft:rgba(44,122,79,0.13);
-    --amber:#93701e;
-    --amber-soft:rgba(147,112,30,0.15);
-    --shadow-lg:0 18px 40px rgba(10,14,26,0.28);
-    --shadow-sm:0 4px 10px rgba(10,14,26,0.10);
-    --radius:10px;
+    --ink-900:#0a0e1a;
+    --ink-800:#111a2e;
+    --ink-700:#1a2740;
+    --ink-650:#213155;
+    --ink-600:#2a3c63;
+    --ink-500:#3e5486;
+    --gold:#cda355;
+    --gold-deep:#a9803a;
+    --gold-soft:rgba(205,163,85,0.16);
+    --paper:#f5efdf;
+    --paper-hi:#fcf9ef;
+    --paper-line:rgba(52,40,18,0.08);
+    --paper-line-strong:rgba(52,40,18,0.15);
+    --ink-text:#241d10;
+    --muted:#79705a;
+    --red-pen:#a3271b;
+    --red-pen-deep:#7d1d14;
+    --red-pen-soft:rgba(163,39,27,0.09);
+    --green:#227455;
+    --green-soft:rgba(34,116,85,0.13);
+    --amber:#96721c;
+    --amber-soft:rgba(150,114,28,0.14);
+    --shadow-lg:0 20px 44px rgba(8,12,22,0.32);
+    --shadow-sm:0 3px 10px rgba(8,12,22,0.09);
+    --shadow-inset:inset 0 1px 0 rgba(255,255,255,0.5);
+    --radius:11px;
     --font-display:'Newsreader', Georgia, serif;
     --font-body:'IBM Plex Sans', -apple-system, sans-serif;
     --font-mono:'IBM Plex Mono', ui-monospace, monospace;
@@ -62,11 +66,15 @@
   /* ---------- SIDEBAR ---------- */
   .sidebar{
     width:288px;flex-shrink:0;
-    background:linear-gradient(165deg,var(--ink-900) 0%,var(--ink-700) 55%,var(--ink-800) 100%);
+    background:
+      radial-gradient(600px 320px at 15% -10%, rgba(205,163,85,0.10), transparent 60%),
+      linear-gradient(165deg,var(--ink-900) 0%,var(--ink-700) 55%,var(--ink-800) 100%);
     color:#e9e4d3;
     padding:26px 0 26px 0;
     display:flex;flex-direction:column;
     position:relative;
+    box-shadow:4px 0 24px rgba(6,9,17,0.35);
+    z-index:2;
   }
   .brand{
     font-family:var(--font-display);
@@ -92,19 +100,19 @@
   .overview-link.active{background:var(--gold-soft);color:#f6e8bf;border-color:rgba(195,154,63,0.4);}
   .subject-tabs{list-style:none;margin:0;padding:0 0 0 0;}
   .subject-tab{
-    position:relative;margin:0 0 6px 0;
+    position:relative;margin:0 0 7px 0;
     padding:10px 16px 10px 18px;margin-left:10px;
-    border-radius:8px 2px 2px 8px;
+    border-radius:8px 3px 3px 8px;
     cursor:pointer;
     border:1px solid transparent;
     border-right:none;
-    transition:background .15s, transform .1s;
+    transition:background .15s, transform .12s;
   }
-  .subject-tab:hover{background:rgba(255,255,255,0.05);}
+  .subject-tab:hover{background:rgba(255,255,255,0.05);transform:translateX(1px);}
   .subject-tab.active{
-    background:var(--paper);
+    background:var(--paper-hi);
     color:var(--ink-text);
-    box-shadow:var(--shadow-sm);
+    box-shadow:var(--shadow-sm), inset 3px 0 0 var(--gold);
   }
   .subject-tab.active .st-code{color:var(--red-pen);}
   .subject-tab.active .st-avg{color:var(--muted);}
@@ -142,42 +150,50 @@
     cursor:pointer;width:calc(100% - 28px);
     transition:background .15s;
   }
-  .add-subject-btn:hover{background:rgba(195,154,63,0.08);}
+  .add-subject-btn:hover{background:rgba(205,163,85,0.10);border-color:var(--gold);}
 
   /* ---------- MAIN ---------- */
   .main{
     flex:1;min-width:0;
     background:
+      radial-gradient(900px 500px at 100% 0%, rgba(205,163,85,0.06), transparent 55%),
       linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 220px),
       repeating-linear-gradient(180deg, transparent 0, transparent 33px, var(--paper-line) 34px),
       linear-gradient(170deg, var(--paper-hi) 0%, var(--paper) 100%);
-    padding:36px 44px 60px 44px;
+    padding:36px 48px 60px 48px;
   }
   .view-wrap{max-width:1080px;margin:0 auto;}
 
   .page-title{
-    font-family:var(--font-display);font-size:34px;font-weight:600;
-    color:var(--ink-800);margin:0 0 4px 0;
+    font-family:var(--font-display);font-size:36px;font-weight:600;
+    color:var(--ink-800);margin:0 0 6px 0;
+    position:relative;display:inline-block;
   }
-  .page-sub{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.02em;margin-bottom:26px;}
+  .page-title::after{
+    content:'';position:absolute;left:1px;bottom:-6px;width:52px;height:3px;
+    background:var(--red-pen);border-radius:2px;opacity:0.55;
+  }
+  .page-sub{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.02em;margin:14px 0 26px 0;}
 
   /* Overview cards */
   .overview-stats{display:flex;gap:18px;margin-bottom:26px;flex-wrap:wrap;}
   .stat-card{
-    background:var(--paper-hi);border:1px solid var(--paper-line-strong);
-    border-radius:var(--radius);padding:16px 22px;box-shadow:var(--shadow-sm);
+    background:linear-gradient(180deg, var(--paper-hi), #f8f2e3);
+    border:1px solid var(--paper-line-strong);
+    border-radius:var(--radius);padding:16px 22px;box-shadow:var(--shadow-sm), var(--shadow-inset);
     min-width:160px;
   }
   .stat-card .label{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  .stat-card .value{font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--ink-800);margin-top:4px;}
+  .stat-card .value{font-family:var(--font-display);font-size:31px;font-weight:600;color:var(--ink-800);margin-top:4px;}
 
   .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:30px;}
   .subject-card{
-    background:var(--paper-hi);border:1px solid var(--paper-line-strong);
+    background:linear-gradient(180deg, var(--paper-hi), #f9f3e5);
+    border:1px solid var(--paper-line-strong);border-top:2.5px solid var(--gold-soft);
     border-radius:var(--radius);padding:18px 20px;cursor:pointer;
-    box-shadow:var(--shadow-sm);transition:transform .12s, box-shadow .12s;
+    box-shadow:var(--shadow-sm);transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease;
   }
-  .subject-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .subject-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-top-color:var(--gold);}
   .subject-card .code{font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:0.03em;}
   .subject-card .name{font-family:var(--font-display);font-size:19px;font-weight:600;margin:4px 0 12px 0;color:var(--ink-800);}
   .subject-card .row{display:flex;justify-content:space-between;align-items:baseline;}
@@ -192,9 +208,10 @@
 
   /* Subject header */
   .subject-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:8px;}
-  .subject-header-left .code-line{font-family:var(--font-mono);font-size:12px;color:var(--gold);letter-spacing:0.03em;}
-  .subject-header-left h1{font-family:var(--font-display);font-size:32px;font-weight:600;margin:2px 0 4px 0;color:var(--ink-800);}
-  .subject-header-left .entry-count{font-family:var(--font-body);font-size:12.5px;color:var(--muted);}
+  .subject-header-left .code-line{font-family:var(--font-mono);font-size:12px;color:var(--gold-deep);letter-spacing:0.06em;font-weight:600;}
+  .subject-header-left h1{font-family:var(--font-display);font-size:34px;font-weight:600;margin:3px 0 9px 0;color:var(--ink-800);position:relative;display:inline-block;}
+  .subject-header-left h1::after{content:'';position:absolute;left:1px;bottom:-6px;width:44px;height:3px;background:var(--red-pen);border-radius:2px;opacity:0.5;}
+  .subject-header-left .entry-count{font-family:var(--font-body);font-size:12.5px;color:var(--muted);margin-top:10px;display:block;}
   .subject-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;}
   .mini-stat{
     background:var(--paper-hi);border:1px solid var(--paper-line-strong);border-radius:8px;
@@ -235,13 +252,16 @@
     font-family:var(--font-display);font-size:18px;font-weight:600;margin:0;color:var(--ink-800);
   }
   .toolbar-controls{display:flex;align-items:center;gap:10px;}
-  .size-toggle{display:flex;border:1px solid var(--paper-line-strong);border-radius:6px;overflow:hidden;}
-  .size-toggle button{
-    font-family:var(--font-mono);font-size:11px;padding:4px 9px;border:none;background:var(--paper-hi);
-    color:var(--muted);cursor:pointer;border-right:1px solid var(--paper-line-strong);
+  .resize-handle{
+    display:flex;align-items:center;justify-content:center;
+    width:26px;height:24px;border-radius:6px;border:1px solid var(--paper-line-strong);
+    background:var(--paper-hi);color:var(--muted);cursor:ns-resize;
+    touch-action:none;user-select:none;
   }
-  .size-toggle button:last-child{border-right:none;}
-  .size-toggle button.active{background:var(--ink-700);color:#f3ead0;}
+  .resize-handle:hover{color:var(--ink-700);border-color:var(--gold);background:var(--gold-soft);}
+  .resize-handle:active{color:var(--ink-800);}
+  .resize-box{overflow:auto;}
+  .chart-wrap.resize-box{overflow:hidden;}
   .section-hide-btn{
     background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;
     padding:2px 4px;
@@ -263,25 +283,25 @@
   .field .field-error{font-family:var(--font-body);font-size:11px;color:var(--red-pen);max-width:180px;}
   .field-year input{width:88px;}
   .field-session select{width:130px;}
-  .field-date input{width:150px;}
-  .field-paper input{width:120px;font-family:var(--font-mono);}
+  .field-paper input{width:96px;font-family:var(--font-mono);}
   .field-scored input,.field-outof input{width:88px;font-family:var(--font-mono);}
   .field-notes{flex:1 1 220px;min-width:220px;}
   .field-notes textarea{font-family:var(--font-hand);font-size:18px;color:var(--red-pen);resize:vertical;min-height:40px;}
   .field-notes .hint{font-family:var(--font-body);font-size:10px;color:var(--muted);font-style:italic;}
   .submit-btn{
-    padding:9px 20px;border-radius:7px;border:none;background:var(--ink-700);color:#f3ead0;
+    padding:9px 22px;border-radius:7px;border:none;
+    background:linear-gradient(180deg, var(--ink-650), var(--ink-700));
+    color:#f3ead0;
     font-family:var(--font-body);font-weight:600;font-size:13.5px;cursor:pointer;
-    box-shadow:var(--shadow-sm);
+    box-shadow:var(--shadow-sm);transition:transform .1s, box-shadow .15s;
   }
-  .submit-btn:hover{background:var(--ink-600);}
+  .submit-btn:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);}
+  .submit-btn:active{transform:translateY(0);}
 
-  .log-form.size-S .field input,.log-form.size-S .field select{padding:5px 8px;font-size:12.5px;}
-  .log-form.size-L{gap:18px;}
-  .log-form.size-L .field input,.log-form.size-L .field select{padding:11px 12px;font-size:14.5px;}
+
 
   /* Chart */
-  .chart-wrap svg{display:block;width:100%;height:auto;}
+  .chart-wrap svg{display:block;width:100%;height:100%;}
   .chart-axis-label{font-family:var(--font-mono);font-size:9px;fill:var(--muted);}
   .chart-line{fill:none;stroke:var(--ink-700);stroke-width:2.5;}
   .chart-avg-line{fill:none;stroke:var(--red-pen);stroke-width:1.5;stroke-dasharray:5 4;}
@@ -338,8 +358,7 @@
   }
   .btn-row-del:hover{color:var(--red-pen);}
 
-  table.sheet.size-S td{padding:5px 9px;font-size:12px;}
-  table.sheet.size-L td{padding:13px 12px;font-size:14px;}
+
 
   /* Modal */
   .modal-backdrop{
@@ -533,6 +552,10 @@ function chronoCompare(a,b){
   return 0;
 }
 function pct(entry){ return (entry.marksScored / entry.marksOutOf) * 100; }
+function fullPaperCode(entry, subject){
+  if(!subject) return entry.paperCode;
+  return subject.code + '/' + entry.paperCode;
+}
 function fmtPct(p){ return (Math.round(p*10)/10).toFixed(1) + '%'; }
 function pctClass(p){ if(p>=80) return 'pct-green'; if(p>=60) return 'pct-neutral'; return 'pct-red'; }
 
@@ -580,15 +603,20 @@ function removeSubject(id){
 }
 
 /* ---------- prefs helpers ---------- */
-function getSectionSize(subjectId, key){
+var SECTION_DEFAULT_HEIGHT = {log:160, chart:230, mistakes:150, sheet:360};
+var SECTION_MIN_HEIGHT = {log:90, chart:150, mistakes:90, sheet:170};
+var SECTION_MAX_HEIGHT = {log:480, chart:560, mistakes:440, sheet:760};
+
+function getSectionHeight(subjectId, key){
   var m = state.prefs.sectionSize[subjectId];
-  if(m && m[key]) return m[key];
-  return 'M';
+  var v = m && m[key];
+  if(typeof v === 'number' && !isNaN(v)) return v;
+  return SECTION_DEFAULT_HEIGHT[key];
 }
-function setSectionSize(subjectId, key, val){
+function setSectionHeight(subjectId, key, px){
   if(!state.prefs.sectionSize[subjectId]) state.prefs.sectionSize[subjectId] = {};
-  state.prefs.sectionSize[subjectId][key] = val;
-  saveState(); render();
+  state.prefs.sectionSize[subjectId][key] = px;
+  saveState();
 }
 function isSectionHidden(subjectId, key){
   var m = state.prefs.sectionHidden[subjectId];
@@ -667,6 +695,45 @@ function render(){
   if(nav.type === 'overview') renderOverview();
   else renderSubjectView(nav.subjectId);
   renderModal();
+  wireResizeHandles();
+}
+
+function wireResizeHandles(){
+  var handles = document.querySelectorAll('.resize-handle');
+  for(var i=0; i<handles.length; i++){
+    (function(handle){
+      handle.addEventListener('pointerdown', function(e){
+        e.preventDefault();
+        var subjectId = handle.getAttribute('data-subject');
+        var key = handle.getAttribute('data-key');
+        var box = document.getElementById('resizebox-'+subjectId+'-'+key);
+        if(!box) return;
+        var startY = e.clientY;
+        var startHeight = box.getBoundingClientRect().height;
+        var min = SECTION_MIN_HEIGHT[key] || 90;
+        var max = SECTION_MAX_HEIGHT[key] || 700;
+        try{ handle.setPointerCapture(e.pointerId); }catch(err){}
+        function clamp(v){ return Math.min(max, Math.max(min, v)); }
+        function onMove(ev){
+          var delta = ev.clientY - startY;
+          var newH = clamp(Math.round(startHeight + delta));
+          box.style.height = newH + 'px';
+        }
+        function onUp(ev){
+          handle.removeEventListener('pointermove', onMove);
+          handle.removeEventListener('pointerup', onUp);
+          handle.removeEventListener('pointercancel', onUp);
+          try{ handle.releasePointerCapture(e.pointerId); }catch(err){}
+          var finalH = clamp(Math.round(box.getBoundingClientRect().height));
+          setSectionHeight(subjectId, key, finalH);
+          render();
+        }
+        handle.addEventListener('pointermove', onMove);
+        handle.addEventListener('pointerup', onUp);
+        handle.addEventListener('pointercancel', onUp);
+      });
+    })(handles[i]);
+  }
 }
 
 function renderSidebar(){
@@ -808,14 +875,12 @@ function renderSubjectView(subjectId){
   if(!isSectionHidden(subjectId,'sheet')) host.appendChild(buildSheetSection(subjectId, entries));
 }
 
+var RESIZE_ICON = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12L12 2M6 12L12 6M10 12L12 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
 function sectionToolbar(subjectId, key, title){
-  var size = getSectionSize(subjectId, key);
-  function sizeBtn(v){
-    return '<button class="'+(size===v?'active':'')+'" onclick="setSectionSize(\''+subjectId+'\',\''+key+'\',\''+v+'\')">'+v+'</button>';
-  }
   return '<div class="section-toolbar"><h2>'+title+'</h2>'+
     '<div class="toolbar-controls">'+
-      '<div class="size-toggle">'+sizeBtn('S')+sizeBtn('M')+sizeBtn('L')+'</div>'+
+      '<button class="resize-handle" title="Drag to resize" data-subject="'+subjectId+'" data-key="'+key+'">'+RESIZE_ICON+'</button>'+
       '<button class="section-hide-btn" title="Hide section" onclick="setSectionHidden(\''+subjectId+'\',\''+key+'\', true)">&#10005;</button>'+
     '</div></div>';
 }
@@ -824,15 +889,15 @@ function sectionToolbar(subjectId, key, title){
 function buildLogSection(subjectId){
   var el = document.createElement('div');
   el.className = 'section';
-  var size = getSectionSize(subjectId, 'log');
+  var h = getSectionHeight(subjectId, 'log');
   el.innerHTML = sectionToolbar(subjectId, 'log', 'Log a paper') +
     '<div class="section-body">'+
       '<div id="logFormErrorBanner"></div>'+
-      '<form class="log-form size-'+size+'" id="logForm" onsubmit="return false;">'+
+      '<div id="resizebox-'+subjectId+'-log" class="resize-box" style="height:'+h+'px;">'+
+      '<form class="log-form" id="logForm" onsubmit="return false;">'+
         field('year','Year','number','e.g. 2025',{min:2000,max:2035}) +
         fieldSelect('session','Session') +
-        field('date','Date attempted','date','',{}) +
-        field('paper','Paper code','text','e.g. 9709/12',{}) +
+        field('paper','Paper','text','e.g. 12',{}) +
         field('scored','Marks scored','number','',{min:0,step:'0.5'}) +
         field('outof','Marks out of','number','',{min:1,step:'0.5'}) +
         '<div class="field field-notes">'+
@@ -842,6 +907,7 @@ function buildLogSection(subjectId){
         '</div>'+
         '<button type="button" class="submit-btn" onclick="submitLogForm(\''+subjectId+'\')">Add paper</button>'+
       '</form>'+
+      '</div>'+
     '</div>';
   setTimeout(function(){ wireLogForm(subjectId); }, 0);
   return el;
@@ -866,7 +932,7 @@ function fieldSelect(id,label){
     (err ? '<div class="field-error">'+escapeHtml(err)+'</div>' : '') + '</div>';
 }
 var formValues = {};
-var FIELD_ORDER = ['year','session','date','paper','scored','outof'];
+var FIELD_ORDER = ['year','session','paper','scored','outof'];
 
 function wireLogForm(subjectId){
   var form = document.getElementById('logForm');
@@ -902,10 +968,16 @@ function wireLogForm(subjectId){
   }
 }
 
+function todayStr(){
+  var d = new Date();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+m+'-'+day;
+}
+
 function submitLogForm(subjectId){
   var year = document.getElementById('f-year').value.trim();
   var session = document.getElementById('f-session').value;
-  var date = document.getElementById('f-date').value;
   var paper = document.getElementById('f-paper').value.trim();
   var scored = document.getElementById('f-scored').value.trim();
   var outof = document.getElementById('f-outof').value.trim();
@@ -920,7 +992,7 @@ function submitLogForm(subjectId){
     errors.session = 'Choose an exam session';
   }
   if(!paper){
-    errors.paper = 'Enter a paper code';
+    errors.paper = 'Enter the paper (e.g. 12)';
   }
   var scoredNum = parseFloat(scored);
   var outofNum = parseFloat(outof);
@@ -932,10 +1004,6 @@ function submitLogForm(subjectId){
   }
   if(!errors.scored && !errors.outof && scoredNum > outofNum){
     errors.outof = 'Cannot be less than marks scored';
-  }
-  if(date){
-    var dt = new Date(date);
-    if(isNaN(dt.getTime())) errors.date = 'Invalid date';
   }
 
   formErrors = errors;
@@ -949,7 +1017,7 @@ function submitLogForm(subjectId){
     subjectId: subjectId,
     year: yearNum,
     session: session,
-    dateAttempted: date || '',
+    dateAttempted: todayStr(),
     paperCode: paper,
     marksScored: scoredNum,
     marksOutOf: outofNum,
@@ -975,15 +1043,13 @@ function submitLogForm(subjectId){
 function buildChartSection(subjectId, chronoSorted){
   var el = document.createElement('div');
   el.className = 'section';
-  var size = getSectionSize(subjectId, 'chart');
-  var heightMap = {S:130, M:210, L:300};
-  var h = heightMap[size];
+  var h = getSectionHeight(subjectId, 'chart');
   var w = 640;
   var bodyHtml;
   if(chronoSorted.length === 0){
     bodyHtml = '<div class="empty-state">No papers logged yet — add one above to start your trend line.</div>';
   } else {
-    bodyHtml = '<div class="chart-wrap">' + buildChartSvg(chronoSorted, w, h) + '</div>';
+    bodyHtml = '<div id="resizebox-'+subjectId+'-chart" class="resize-box chart-wrap" style="height:'+h+'px;">' + buildChartSvg(chronoSorted, w, h) + '</div>';
   }
   el.innerHTML = sectionToolbar(subjectId, 'chart', 'Progress over time') +
     '<div class="section-body">'+bodyHtml+'</div>';
@@ -1032,11 +1098,10 @@ function buildChartSvg(entries, w, h){
 function buildMistakesSection(subjectId, entries){
   var el = document.createElement('div');
   el.className = 'section';
-  var size = getSectionSize(subjectId, 'mistakes');
-  var heightMap = {S:90, M:160, L:280};
+  var h = getSectionHeight(subjectId, 'mistakes');
   var tags = analyzeNotes(entries);
   var bodyHtml = tags.length ?
-    '<div class="tag-cloud" style="max-height:'+heightMap[size]+'px;">'+renderTagCloud(tags)+'</div>' :
+    '<div id="resizebox-'+subjectId+'-mistakes" class="resize-box tag-cloud" style="height:'+h+'px;">'+renderTagCloud(tags)+'</div>' :
     '<div class="empty-state">No repeated patterns yet. Add private notes when logging papers and they\'ll surface here once a pattern repeats.</div>';
   el.innerHTML = sectionToolbar(subjectId, 'mistakes', 'Recurring mistakes') +
     '<div class="section-body">'+bodyHtml+'</div>';
@@ -1049,8 +1114,8 @@ var SORT_LABELS = {
   'year-desc':'Year (newest first)',
   'marks-desc':'Marks (highest first)',
   'marks-asc':'Marks (lowest first)',
-  'date-desc':'Date attempted (newest first)',
-  'date-asc':'Date attempted (oldest first)'
+  'date-desc':'Date logged (newest first)',
+  'date-asc':'Date logged (oldest first)'
 };
 function sortEntries(entries, key){
   var arr = entries.slice();
@@ -1083,10 +1148,10 @@ function sortEntries(entries, key){
 function buildSheetSection(subjectId, entries){
   var el = document.createElement('div');
   el.className = 'section';
-  var size = getSectionSize(subjectId, 'sheet');
-  var maxHeightMap = {S:220, M:380, L:600};
+  var h = getSectionHeight(subjectId, 'sheet');
   var sortKey = getSortOrder(subjectId);
   var sorted = sortEntries(entries, sortKey);
+  var subject = state.subjects.find(function(s){ return s.id === subjectId; });
 
   var bodyHtml;
   if(entries.length === 0){
@@ -1098,7 +1163,7 @@ function buildSheetSection(subjectId, entries){
         '<td class="mono">'+e.year+'</td>'+
         '<td>'+escapeHtml(e.session)+'</td>'+
         '<td class="mono">'+(e.dateAttempted || '—')+'</td>'+
-        '<td class="mono">'+escapeHtml(e.paperCode)+'</td>'+
+        '<td class="mono">'+escapeHtml(fullPaperCode(e, subject))+'</td>'+
         '<td class="mono">'+e.marksScored+' / '+e.marksOutOf+'</td>'+
         '<td><span class="pct-badge '+pctClass(p)+'">'+fmtPct(p)+'</span></td>'+
         '<td>'+(e.notes ? '<button class="note-flag" title="Has notes" onclick="openDetail(\''+e.id+'\')">&#128221;</button>' : '')+'</td>'+
@@ -1114,8 +1179,8 @@ function buildSheetSection(subjectId, entries){
           return '<option value="'+k+'"'+(k===sortKey?' selected':'')+'>'+SORT_LABELS[k]+'</option>';
         }).join('')+
       '</select></div>'+
-      '<div class="sheet-scroll" style="max-height:'+maxHeightMap[size]+'px;">'+
-      '<table class="sheet size-'+size+'"><thead><tr>'+
+      '<div id="resizebox-'+subjectId+'-sheet" class="resize-box sheet-scroll" style="height:'+h+'px;">'+
+      '<table class="sheet"><thead><tr>'+
         '<th>Year</th><th>Session</th><th>Date</th><th>Paper</th><th>Marks</th><th>%</th><th></th><th></th>'+
       '</tr></thead><tbody>'+rows+'</tbody></table></div>';
   }
@@ -1165,15 +1230,15 @@ function renderModal(){
       '<div class="modal-backdrop" onclick="if(event.target===this)closeDetail()">'+
         '<div class="modal">'+
           '<div class="modal-head">'+
-            '<div><h3>'+escapeHtml(entry.paperCode)+'</h3><div class="sub">'+escapeHtml(subject?subject.name:'')+' · '+escapeHtml(subject?subject.code:'')+'</div></div>'+
+            '<div><h3>'+escapeHtml(fullPaperCode(entry, subject))+'</h3><div class="sub">'+escapeHtml(subject?subject.name:'')+'</div></div>'+
             '<button class="modal-close" onclick="closeDetail()">&#10005;</button>'+
           '</div>'+
           '<div class="modal-body">'+
             '<div class="detail-grid">'+
               detailItem('Year', entry.year) +
               detailItem('Session', entry.session) +
-              detailItem('Date attempted', entry.dateAttempted || '—') +
-              detailItem('Paper code', entry.paperCode, true) +
+              detailItem('Date logged', entry.dateAttempted || '—') +
+              detailItem('Paper', fullPaperCode(entry, subject), true) +
               detailItem('Marks', entry.marksScored + ' / ' + entry.marksOutOf, true) +
               detailItemHtml('Percentage', '<span class="pct-badge '+pctClass(p)+'">'+fmtPct(p)+'</span>') +
             '</div>'+
